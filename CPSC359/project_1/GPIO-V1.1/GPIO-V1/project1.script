@@ -1,0 +1,77 @@
+Script started on 2021-02-23 14:17:23-07:00 [TERM="xterm-256color" TTY="/dev/pts/1" COLUMNS="120" LINES="30"]
+]0;pi@raspberrypi: ~/Desktop/ProjectTestbed/GPIO-V1.1/GPIO-V1[01;32mpi@raspberrypi[00m:[01;34m~/Desktop/ProjectTestbed/GPIO-V1.1/GPIO-V1 $[00m make
+make: 'myProg' is up to date.
+]0;pi@raspberrypi: ~/Desktop/ProjectTestbed/GPIO-V1.1/GPIO-V1[01;32mpi@raspberrypi[00m:[01;34m~/Desktop/ProjectTestbed/GPIO-V1.1/GPIO-V1 $[00m ./myProg
+Created by: John Abo and Hilton Luu
+pointer address: 0xb6fdc000
+
+Please press a button...
+
+You have pressed A 
+
+Please press a button...
+
+You have pressed B 
+
+Please press a button...
+
+You have pressed B 
+
+You have pressed A 
+
+Please press a button...
+
+You have pressed L 
+
+Please press a button...
+
+You have pressed R 
+
+Please press a button...
+
+You have pressed Down 
+
+Please press a button...
+
+You have pressed Left 
+
+Please press a button...
+
+You have pressed Up 
+
+Please press a button...
+
+You have pressed Right 
+
+Please press a button...
+
+You have pressed Select 
+
+Please press a button...
+
+You have pressed Y 
+
+Please press a button...
+
+You have pressed B 
+
+You have pressed Y 
+
+Please press a button...
+
+You have pressed Down 
+
+Please press a button...
+
+You have pressed Down 
+
+You have pressed Right 
+
+Please press a button...
+
+You have pressed Start 
+Program is terminating...
+]0;pi@raspberrypi: ~/Desktop/ProjectTestbed/GPIO-V1.1/GPIO-V1[01;32mpi@raspberrypi[00m:[01;34m~/Desktop/ProjectTestbed/GPIO-V1.1/GPIO-V1 $[00m exit
+exit
+
+Script done on 2021-02-23 14:18:35-07:00 [COMMAND_EXIT_CODE="0"]

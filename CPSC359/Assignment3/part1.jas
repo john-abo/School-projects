@@ -1,0 +1,464 @@
+//Test program to see how deep in garbage I am
+//But if it works out well enough, I may just
+//change some stuff and use it for my assignment
+
+.constant
+	
+	OBJREF 0x40
+	
+.end-constant
+
+.main
+	
+.var
+	
+	num1
+	
+	num2
+	
+	mul
+	
+	div
+	
+.end-var
+	
+start:
+	
+	//Numbers to be multiplied
+	BIPUSH	0x0A
+	ISTORE	num1
+	
+	BIPUSH	0x02
+	ISTORE	num2
+	
+	//== This part test the imul method with 10 and 2 and expects product of 0x14 or 20
+	
+	LDC_W	OBJREF
+	ILOAD	num1
+	ILOAD	num2
+	INVOKEVIRTUAL	imul
+	ISTORE	mul
+	
+	BIPUSH	0x4D
+	OUT
+	
+	//With this demonstration, it should be printing '14'
+	LDC_W	OBJREF
+	ILOAD	mul
+	INVOKEVIRTUAL	print
+	
+	//== This part test the idiv method with 10 and 2, and expects quotient of 5
+	
+	LDC_W	OBJREF
+	ILOAD	num1
+	ILOAD	num2
+	BIPUSH	0x00
+	INVOKEVIRTUAL	idiv
+	ISTORE	div
+	
+	BIPUSH	0x51
+	OUT
+	
+	LDC_W	OBJREF
+	ILOAD	div
+	INVOKEVIRTUAL	print
+	
+	//== This part test the idiv method with 10 and 5, and expects remainder of 0
+	
+	LDC_W	OBJREF
+	ILOAD	num1
+	ILOAD	num2
+	BIPUSH	0x01
+	INVOKEVIRTUAL	idiv
+	ISTORE	div
+	
+	BIPUSH	0x52
+	OUT
+	
+	LDC_W	OBJREF
+	ILOAD	div
+	INVOKEVIRTUAL	print
+	
+	//== This part test the idiv method with 10 and 3, and expects remainder of 1
+	
+	LDC_W	OBJREF
+	BIPUSH	0x0A
+	BIPUSH	0x03
+	BIPUSH	0x01
+	INVOKEVIRTUAL	idiv
+	ISTORE	div
+	
+	BIPUSH	0x52
+	OUT
+	
+	LDC_W	OBJREF
+	ILOAD	div
+	INVOKEVIRTUAL	print
+	
+.end-main
+
+//imul function
+
+.method imul(int1, int2)
+	
+.var
+
+	c
+	o
+	m
+	i
+
+	abs1
+	abs2
+
+.end-var
+	//Body
+	
+	BIPUSH	0x0		//Initializes i and m
+	DUP
+	ISTORE	i
+	ISTORE	m
+
+	//Finds absolute values of int1 and int2
+	
+	LDC_W	OBJREF
+	ILOAD	int1
+	INVOKEVIRTUAL	abs
+	ISTORE	abs1
+	
+	LDC_W	OBJREF
+	ILOAD	int2
+	INVOKEVIRTUAL	abs
+	ISTORE	abs2
+
+	//Finds low and high between int1 and int2
+
+	LDC_W	OBJREF
+	ILOAD	abs1
+	ILOAD	abs2
+	INVOKEVIRTUAL	min
+	ISTORE	c
+	
+	LDC_W	OBJREF
+	ILOAD	abs1
+	ILOAD	abs2
+	INVOKEVIRTUAL	max
+	ISTORE	o
+	
+	//For loop that does multiplication
+	
+check:
+
+	//Body of loop
+	ILOAD	m
+	ILOAD	o
+	IADD
+	ISTORE	m
+	
+	ILOAD	i
+	BIPUSH	0x01
+	IADD
+	ISTORE	i
+	
+	ILOAD	i
+	ILOAD	c
+	ISUB
+	IFLT	check	//If c is greater than i, the difference would return negative and go to end of method
+	
+endMul:
+
+	//Somewhere here, check for negatives
+	
+	//If int1 is a negative, negate m
+	ILOAD	int1
+	IFLT	negateOnce
+	GOTO	skipFirstNegate
+	
+negateOnce:
+	ILOAD	m
+	INEG
+skipFirstNegate:
+
+	//If int2 is a negative, negate m
+	ILOAD	int2
+	IFLT	negateTwice
+	GOTO	skipSecondNegate
+	
+negateTwice:
+	ILOAD	m
+	INEG
+skipSecondNegate:
+	
+	//In theory, if both were negative, they'd negate twice and it'd work out back to positive
+	//and if only 1 were negative, should only negate once
+	//===================================
+
+	ILOAD	m
+	IRETURN
+	
+.end-method
+
+//idiv function
+
+.method idiv(int1, int2, return_type)
+
+.var
+	q		//Quotient
+	r		//Remainder
+
+	ret		//value that will be returned, either quotient or remainder
+
+	abs_int1
+	abs_int2
+.end-var
+	
+	LDC_W	OBJREF
+	ILOAD	int1
+	INVOKEVIRTUAL	abs
+	ISTORE	abs_int1
+	
+	LDC_W	OBJREF
+	ILOAD	int2
+	INVOKEVIRTUAL	abs
+	ISTORE	abs_int2
+	
+	BIPUSH	0x00
+	DUP
+	ISTORE	q
+	ISTORE	ret
+	
+	ILOAD	abs_int1
+	ISTORE	r
+	
+	//Loop goes here
+	
+check:
+	ILOAD	r
+	ILOAD	abs_int2
+	ISUB			//r - abs_int2, if this is 0, then abs_int2 > 0
+	IFLT	endDiv	//the difference would return negative and go to end of method
+	
+	//Decrements r by abs_int2
+	ILOAD	r
+	ILOAD	abs_int2
+	ISUB
+	ISTORE	r
+	
+	//Increments q by 1
+	ILOAD	q
+	BIPUSH	0x01
+	IADD
+	ISTORE	q
+	
+	GOTO	check
+	
+endDiv:
+	
+	//Somewhere here, decide which to return lols
+	//For now, lets just do q
+	
+	ILOAD	return_type
+	IFEQ	returnQuotient
+	
+	ILOAD	r
+	ISTORE	ret
+	
+	GOTO	endDiv2
+	
+returnQuotient:
+	ILOAD	q
+	ISTORE	ret
+	
+	//===========================================
+	
+endDiv2:
+
+	//If int1 is a negative, negate m
+	ILOAD	int1
+	IFLT	negateOnce
+	GOTO	skipFirstNegate
+	
+negateOnce:
+	ILOAD	ret
+	INEG
+skipFirstNegate:
+
+	//If int2 is a negative, negate m
+	ILOAD	int2
+	IFLT	negateTwice
+	GOTO	skipSecondNegate
+	
+negateTwice:
+	ILOAD	ret
+	INEG
+skipSecondNegate:
+	
+	ILOAD	ret
+	IRETURN
+
+.end-method
+
+//min function
+
+.method min(int1, int2)
+	
+	ILOAD	int1
+	ILOAD	int2
+	
+	ISUB	//Subtracts int2 from int1
+	
+	IFLT	twoIsGreater
+	
+	ILOAD	int2
+	GOTO	endMin
+	
+twoIsGreater:
+	
+	ILOAD	int1
+	
+endMin:
+	
+	IRETURN
+	
+.end-method
+
+//max function
+
+.method max(int1, int2)
+	
+	
+	ILOAD	int1
+	ILOAD	int2
+	
+	ISUB	//Subtracts int2 from int1
+	
+	IFLT	twoIsGreater
+	
+	ILOAD	int1
+	GOTO	endMin
+	
+twoIsGreater:
+	
+	ILOAD	int2
+	
+endMin:
+	
+	IRETURN
+	
+.end-method
+
+.method abs(num)
+	
+	ILOAD	num
+	IFLT	numNegative
+	
+	ILOAD	num
+	GOTO	endAbs
+	
+numNegative:
+
+	BIPUSH	0x30
+	ILOAD	num
+	ISUB
+	
+endAbs:
+	
+	IRETURN
+	
+.end-method
+
+//The print method was borrowed from add.js
+
+.method print( total ) 		// print converts a number into a string of
+				//   characters and prints them.  All of the characters
+				//   are pushed onto the stack, least significant
+				//   digit first, then popped off and printed.
+.var
+place
+index
+.end-var
+
+print: 	BIPUSH 0x9		// there are 8 nibbles in each integer--setting
+				//   this as nine pushes 10 characters onto the
+ 				//   stack, thus a total of ten printed digits,
+				//   but setting this less does not remove the
+				//   two leading zeros, just removes significant
+				//   digits
+	ISTORE index
+	BIPUSH 0x1		// comparison bit
+	ISTORE place
+print1:	BIPUSH 0x0
+	ILOAD index		// index = index - 1
+	BIPUSH 0x1
+	ISUB
+	DUP
+	IFEQ pall		// if index = 0  goto pall
+	ISTORE index
+	ILOAD total		// else
+	ILOAD place		//
+	IAND			//   if 1st bit of current nibble is zero (total & place)
+	IFEQ print2		//     goto print2
+	BIPUSH 0x1		//   else set first bit of character
+	IADD
+print2: ILOAD place		//   place = place << 1 
+	DUP
+	IADD
+	ISTORE place
+	ILOAD total
+	ILOAD place
+	IAND			//   if 2nd bit of current nibble is zero (total & place)
+	IFEQ print3		//     goto print3
+	BIPUSH 0x2		//   else set second bit of character
+	IADD	
+print3: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	ILOAD total
+	ILOAD place
+	IAND			//   if 3rd bit of current nibble is zero (total & place)
+	IFEQ print4		//     goto print4
+	BIPUSH 0x4		//   else set second bit of character
+	IADD	
+print4: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	ILOAD total
+	ILOAD place
+	IAND			//   if 4th bit of current nibble is zero (total & place)
+	IFEQ print5		//     goto print5
+	BIPUSH 0x8		//   else set second bit of character
+	IADD	
+print5: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	GOTO print1
+	
+pall:   POP			// Pop off leading 0's
+	POP
+	BIPUSH 0x9
+	ISTORE index
+pall1:	ILOAD index		// index = index - 1
+	BIPUSH 0x1
+	ISUB
+	DUP
+	IFEQ return		// if index = 0  return
+	ISTORE index
+	DUP
+	BIPUSH 0xa		// else if character < 0xa goto pall1
+	ISUB
+	IFLT pall2
+	BIPUSH 0x37		// else convert character to "A"-"F"
+	IADD
+	OUT			// print character
+	GOTO pall1		// goto pall (prepare & print next character)
+pall2:	BIPUSH 0x30		// convert character to "0"-"9"
+	IADD
+	OUT			// print character
+	GOTO pall1		// goto pall1 (prepare & print next character)
+return:	BIPUSH 0xa		// print cr
+	OUT
+	IRETURN			// no return value
+.end-method

@@ -1,0 +1,244 @@
+//Lets test some stuff out yeah?
+
+.constant
+	
+	OBJREF 0x40
+	
+.end-constant
+
+.main
+
+.var
+
+	result1
+	result2
+	result3
+	result4
+	result5
+	result6
+
+.end-var
+
+start:
+
+	//Pushes 15 and 15 to the stack, these will then be multiplied and result's
+	//stored in local variable
+	
+	BIPUSH	0x0f
+	BIPUSH	0x0f
+	
+	//It was working before because MDR last read 2, so of course it as going
+	//to work even if the instruction wasn't supposed to. This ensures quality
+	BIPUSH	0xff
+	POP
+
+	//Multiplication instruction, this has to work eventually
+	IMUL
+	
+	//Stores product in result 1
+	ISTORE	result1
+
+	BIPUSH	0x4D
+	OUT
+
+	//Should print the product of 15 * 15 in hex (E1)
+
+	LDC_W	OBJREF
+	ILOAD	result1
+	INVOKEVIRTUAL	print
+	
+	//Pushes 15 and 4 to the stack, these will then be divided and result's
+	//stored in local variables (15 / 4)
+	
+	BIPUSH	0x0f
+	BIPUSH	0x04
+	
+	//It was working before because MDR last read 2, so of course it as going
+	//to work even if the instruction wasn't supposed to. This ensures quality
+	BIPUSH	0xff
+	POP
+
+	//Division instruction, this has to work eventually
+	IDIV
+	
+	//Stores product in result 1
+	ISTORE	result3
+	ISTORE	result4
+
+	BIPUSH	0x51
+	OUT
+
+	//Should print the product of 10 * 10 in hex (64)
+
+	LDC_W	OBJREF
+	ILOAD	result3
+	INVOKEVIRTUAL	print
+	
+	BIPUSH	0x52
+	OUT
+
+	//Should print the product of 10 * 10 in hex (64)
+
+	LDC_W	OBJREF
+	ILOAD	result4
+	INVOKEVIRTUAL	print
+	
+	//Pushes 10 and 10 to the stack, these will then be multiplied and result's
+	//stored in local variable
+	
+	BIPUSH	0x0A
+	BIPUSH	0x0A
+	
+	//It was working before because MDR last read 2, so of course it as going
+	//to work even if the instruction wasn't supposed to. This ensures quality
+	BIPUSH	0xff
+	POP
+
+	//Multiplication instruction, this has to work eventually
+	IMUL
+	
+	//Stores product in result 1
+	ISTORE	result2
+
+	BIPUSH	0x4D
+	OUT
+
+	//Should print the product of 10 * 10 in hex (64)
+
+	LDC_W	OBJREF
+	ILOAD	result2
+	INVOKEVIRTUAL	print
+
+	//Pushes 15 and 4 to the stack, these will then be divided and result's
+	//stored in local variables (15 / 4)
+	
+	BIPUSH	0x66
+	BIPUSH	0x1b
+	
+	//It was working before because MDR last read 2, so of course it as going
+	//to work even if the instruction wasn't supposed to. This ensures quality
+	BIPUSH	0xff
+	POP
+
+	//Division instruction, this has to work eventually
+	IDIV
+	
+	//Stores product in result 1
+	ISTORE	result3
+	ISTORE	result4
+
+	BIPUSH	0x51
+	OUT
+
+	//Should print the product of 10 * 10 in hex (64)
+
+	LDC_W	OBJREF
+	ILOAD	result3
+	INVOKEVIRTUAL	print
+	
+	BIPUSH	0x52
+	OUT
+
+	//Should print the product of 10 * 10 in hex (64)
+
+	LDC_W	OBJREF
+	ILOAD	result4
+	INVOKEVIRTUAL	print
+
+.end-main
+
+//The print method was borrowed from add.js
+
+.method print( total ) 		// print converts a number into a string of
+				//   characters and prints them.  All of the characters
+				//   are pushed onto the stack, least significant
+				//   digit first, then popped off and printed.
+.var
+place
+index
+.end-var
+
+print: 	BIPUSH 0x9		// there are 8 nibbles in each integer--setting
+				//   this as nine pushes 10 characters onto the
+ 				//   stack, thus a total of ten printed digits,
+				//   but setting this less does not remove the
+				//   two leading zeros, just removes significant
+				//   digits
+	ISTORE index
+	BIPUSH 0x1		// comparison bit
+	ISTORE place
+print1:	BIPUSH 0x0
+	ILOAD index		// index = index - 1
+	BIPUSH 0x1
+	ISUB
+	DUP
+	IFEQ pall		// if index = 0  goto pall
+	ISTORE index
+	ILOAD total		// else
+	ILOAD place		//
+	IAND			//   if 1st bit of current nibble is zero (total & place)
+	IFEQ print2		//     goto print2
+	BIPUSH 0x1		//   else set first bit of character
+	IADD
+print2: ILOAD place		//   place = place << 1 
+	DUP
+	IADD
+	ISTORE place
+	ILOAD total
+	ILOAD place
+	IAND			//   if 2nd bit of current nibble is zero (total & place)
+	IFEQ print3		//     goto print3
+	BIPUSH 0x2		//   else set second bit of character
+	IADD	
+print3: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	ILOAD total
+	ILOAD place
+	IAND			//   if 3rd bit of current nibble is zero (total & place)
+	IFEQ print4		//     goto print4
+	BIPUSH 0x4		//   else set second bit of character
+	IADD	
+print4: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	ILOAD total
+	ILOAD place
+	IAND			//   if 4th bit of current nibble is zero (total & place)
+	IFEQ print5		//     goto print5
+	BIPUSH 0x8		//   else set second bit of character
+	IADD	
+print5: ILOAD place		//   place = place << 1
+	DUP
+	IADD
+	ISTORE place
+	GOTO print1
+	
+pall:   POP			// Pop off leading 0's
+	POP
+	BIPUSH 0x9
+	ISTORE index
+pall1:	ILOAD index		// index = index - 1
+	BIPUSH 0x1
+	ISUB
+	DUP
+	IFEQ return		// if index = 0  return
+	ISTORE index
+	DUP
+	BIPUSH 0xa		// else if character < 0xa goto pall1
+	ISUB
+	IFLT pall2
+	BIPUSH 0x37		// else convert character to "A"-"F"
+	IADD
+	OUT			// print character
+	GOTO pall1		// goto pall (prepare & print next character)
+pall2:	BIPUSH 0x30		// convert character to "0"-"9"
+	IADD
+	OUT			// print character
+	GOTO pall1		// goto pall1 (prepare & print next character)
+return:	BIPUSH 0xa		// print cr
+	OUT
+	IRETURN			// no return value
+.end-method

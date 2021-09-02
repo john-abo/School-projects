@@ -1,0 +1,87 @@
+Script started on 2021-01-30 01:54:55-07:00
+]0;john.abo@csx:~/cpsc359/asgm/1/racejohn.abo@csx:~/cpsc359/asgm/1/race$ gcc race.c -pthra[Kead -o -[Krace
+]0;john.abo@csx:~/cpsc359/asgm/1/racejohn.abo@csx:~/cpsc359/asgm/1/race$ ./race
+Not the right amount of arguments
+]0;john.abo@csx:~/cpsc359/asgm/1/racejohn.abo@csx:~/cpsc359/asgm/1/race$ ./race 10
+Not the right amount of arguments
+]0;john.abo@csx:~/cpsc359/asgm/1/racejohn.abo@csx:~/cpsc359/asgm/1/race$ ./race 10 [K[K01
+Not the right amount of arguments
+]0;john.abo@csx:~/cpsc359/asgm/1/racejohn.abo@csx:~/cpsc359/asgm/1/race$ ./race 101 0
+Argument too large
+]0;john.abo@csx:~/cpsc359/asgm/1/racejohn.abo@csx:~/cpsc359/asgm/1/race$ ./race 101 0[K5
+Argument too large
+]0;john.abo@csx:~/cpsc359/asgm/1/racejohn.abo@csx:~/cpsc359/asgm/1/race$ ./race 101 5[K[K[K[K2 0
+That distance is too short
+]0;john.abo@csx:~/cpsc359/asgm/1/racejohn.abo@csx:~/cpsc359/asgm/1/race$ 5 5
+bash: 5: command not found
+]0;john.abo@csx:~/cpsc359/asgm/1/racejohn.abo@csx:~/cpsc359/asgm/1/race$ 5 5[K[K[K./racew [K[K 4[K5 5
+5 horses and the finish line is 5 spaces away
+Ready?
+set?
+Go!
+[H[JHorse #1: 	> 0
+Horse #2: 	> 0
+Horse #3: 	-> 1
+Horse #4: 	-> 1
+Horse #5: 	> 0
+[H[JHorse #1: 	> 0
+Horse #2: 	-> 1
+Horse #3: 	-> 1
+Horse #4: 	----> 4
+Horse #5: 	-> 1
+[H[JHorse #1: 	-> 1
+Horse #2: 	---> 3
+Horse #3: 	--> 2
+Horse #4: 	-----> 5
+Horse #5: 	-> 1
+	Horse 3 has finished!
+[H[JHorse #1: 	-> 1
+Horse #2: 	-----> 5
+Horse #3: 	-----> 5
+Horse #4: 	------*
+Horse #5: 	--> 2
+	Horse 2 has finished!
+	Horse 1 has finished!
+[H[JHorse #1: 	--> 2
+Horse #2: 	------*
+Horse #3: 	------*
+Horse #4: 	------*
+Horse #5: 	--> 2
+[H[JHorse #1: 	---> 3
+Horse #2: 	------*
+Horse #3: 	------*
+Horse #4: 	------*
+Horse #5: 	---> 3
+[H[JHorse #1: 	---> 3
+Horse #2: 	------*
+Horse #3: 	------*
+Horse #4: 	------*
+Horse #5: 	---> 3
+	Horse 4 has finished!
+[H[JHorse #1: 	-----> 5
+Horse #2: 	------*
+Horse #3: 	------*
+Horse #4: 	------*
+Horse #5: 	------*
+[H[JHorse #1: 	-----> 5
+Horse #2: 	------*
+Horse #3: 	------*
+Horse #4: 	------*
+Horse #5: 	------*
+	Horse 0 has finished!
+[H[JHorse #1: 	------*
+Horse #2: 	------*
+Horse #3: 	------*
+Horse #4: 	------*
+Horse #5: 	------*
+	Race finished
+Race stats: 
+Horse #1, Time: 10, Rank: 5
+Horse #2, Time: 5, Rank: 3
+Horse #3, Time: 4, Rank: 2
+Horse #4, Time: 4, Rank: 1
+Horse #5, Time: 8, Rank: 4
+]0;john.abo@csx:~/cpsc359/asgm/1/racejohn.abo@csx:~/cpsc359/asgm/1/race$ r[Kexit
+exit
+
+Script done on 2021-01-30 01:56:06-07:00
