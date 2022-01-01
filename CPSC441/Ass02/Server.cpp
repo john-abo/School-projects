@@ -87,7 +87,7 @@ int translateFunc() {
         try {
             // I'm just going to make a bunch of ifs to check lol
             reply = words.at(reply);
-        } catch (const std::out_of_range& oor) {
+        } catch (const std::exception& oor) {
             reply = "Word not found...";
         }
 
@@ -170,7 +170,7 @@ int convertFunc() {
         // Incase it fails to convert
         try {
             user = std::stof(userNum);
-        } catch (const std::invalid_argument& ia) {
+        } catch (const std::exception& ia) {
             user = 0;
             userNum = "";
             reply = "Failed to get value";
@@ -191,7 +191,7 @@ int convertFunc() {
                 user = user * conv.at(destCur);
                 reply = "\nCurrency: ";
                 reply += std::to_string(user);
-            } catch (const std::out_of_range& oor) {
+            } catch (const std::exception& oor) {
                 reply = "Currency not found...";
             } 
 
@@ -281,7 +281,14 @@ int voteFunc() {
             // Gets the user's vote
             readSize = recvfrom(sock, buffer, 1024, MSG_WAITALL, client, (socklen_t*)&testInt);
 
-            resp = buffer[0] - 48;
+            std::cout << "Buffer: " << buffer << "\n";
+
+            try {
+                resp = std::stoi(buffer);
+            } catch (const std::exception& oor) {
+                reply = "Currency not found...";
+                resp = 0;
+            } 
             resp /= key;
 
             std::cout << "User's vote: " << resp << "\n";
