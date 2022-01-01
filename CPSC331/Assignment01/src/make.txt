@@ -1,0 +1,10 @@
+@echo off
+
+javac "ca/ucalgary/cpsc331/PriorityQueue.java"
+javac "ca/ucalgary/cpsc331/MinHeap.java"
+javac "ca/ucalgary/cpsc331/Tester.java"
+java "ca/ucalgary/cpsc331/Tester"
+
+del "ca\ucalgary\cpsc331\MinHeap.class"
+del "ca\ucalgary\cpsc331\PriorityQueue.class"
+del "ca\ucalgary\cpsc331\Tester.class"
